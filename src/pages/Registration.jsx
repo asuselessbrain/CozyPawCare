@@ -7,6 +7,7 @@ import { Link } from 'react-router';
 
 const Registration = () => {
     const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     return (
         <div class="min-h-[calc(100vh-120px)] flex flex-col items-center justify-center p-4">
             <div class="grid md:grid-cols-2 items-center gap-4 max-md:gap-8 max-w-6xl max-md:max-w-lg w-full p-4 [box-shadow:0_2px_10px_-3px_rgba(6,81,237,0.3)] rounded-md">
@@ -38,21 +39,32 @@ const Registration = () => {
                                 {
                                     showPassword ? <FaEyeSlash onClick={() => setShowPassword(!showPassword)} size={24} class="absolute right-2 cursor-pointer text-gray-400" /> : <FaRegEye onClick={() => setShowPassword(!showPassword)} size={24} class="absolute right-2 cursor-pointer text-gray-400" />
                                 }
-                                
-                                
+
+
+                            </div>
+                        </div>
+                        <div class="mt-8">
+                            <label class="text-slate-900 text-[13px] font-medium block mb-2">Confirm Password</label>
+                            <div class="relative flex items-center">
+                                <input name="confirm_password" type={showConfirmPassword ? "text" : "password"} required class="w-full text-slate-900 text-sm border-b border-slate-300 focus:border-blue-600 pl-2 pr-8 py-3 outline-none" placeholder="Enter password" />
+                                {
+                                    showConfirmPassword ? <FaEyeSlash onClick={() => setShowConfirmPassword(!showConfirmPassword)} size={24} class="absolute right-2 cursor-pointer text-gray-400" /> : <FaRegEye onClick={() => setShowConfirmPassword(!showConfirmPassword)} size={24} class="absolute right-2 cursor-pointer text-gray-400" />
+                                }
+
+
                             </div>
                         </div>
                         <div class="flex flex-wrap items-center justify-between gap-4 mt-8">
-                            <div class="flex items-center">
-                                <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 shrink-0 text-blue-600 focus:ring-blue-500 border-slate-300 rounded-sm" />
-                                <label for="remember-me" class="ml-3 block text-sm text-slate-900">
-                                    Remember me
+                            <div className="flex items-center">
+                                <input id="remember-me" name="termAndCondition" type="checkbox" className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300 rounded" required />
+                                <label htmlFor="remember-me" className="ml-3 block text-sm text-slate-900">
+                                    Accept Term and Condition
                                 </label>
                             </div>
                         </div>
 
                         <div class="mt-12">
-                            <button type="button" class="w-full shadow-xl py-2.5 px-4 text-sm font-medium tracking-wide rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none cursor-pointer">
+                            <button type="submit" class="w-full shadow-xl py-2.5 px-4 text-sm font-medium tracking-wide rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none cursor-pointer">
                                 Sign Up
                             </button>
                         </div>
