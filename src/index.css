@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+nav a.active{
+  @apply text-green-500 border border-green-500 rounded hover:text-green-600 hover:border-green-600
+}
