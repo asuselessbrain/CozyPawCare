@@ -1,25 +1,36 @@
 import { use, useEffect } from 'react';
 import { FcGoogle } from 'react-icons/fc';
-import { Link } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { AuthContext } from '../proviider/AuthContext';
 import { toast } from 'react-toastify';
 
 const Login = () => {
-    const { loginWithGoogle, user, loading, setLoading } = use(AuthContext)
+    const { loginWithGoogle, user, loading, setLoading, loginWithEmail } = use(AuthContext)
+    const location = useLocation()
+    const navigate = useNavigate()
 
     useEffect(() => {
         setLoading(false);
     }, [setLoading]);
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         setLoading(true)
         const formData = e.target;
 
         const email = formData.email.value;
         const password = formData.password.value;
-        const termAndCondition = formData.termAndCondition.checked;
 
-        console.log(email, password, termAndCondition)
+        try {
+            const res = await loginWithEmail(email, password)
+            if (res.user) {
+                toast.success("Login Successful !")
+                navigate(location.state ? location.state : "/")
+                setLoading(false)
+            }
+        } catch (error) {
+            toast.error(error.message.split("/")[1].split(")")[0])
+            setLoading(false)
+        }
     }
 
     const handleGoogleLogin = async () => {
@@ -28,6 +39,7 @@ const Login = () => {
             const res = await loginWithGoogle()
             if (res.user) {
                 toast.success("Login Successful !")
+                navigate(location.state ? location.state : "/")
                 setLoading(false)
             }
         }
@@ -74,9 +86,14 @@ const Login = () => {
                     </div>
 
                     <div className="mt-12!">
-                        <button type="submit" className="w-full shadow-xl py-2.5 px-4 text-[15px] font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none cursor-pointer">
-                            Log in
-                        </button>
+                        {
+                            loading ? <button type="submit" disabled className="w-full disabled:cursor-not-allowed shadow-xl py-2.5 px-4 text-sm font-medium tracking-wide rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none cursor-pointer">
+                                Loading....
+                            </button> :
+                                <button type="submit" disabled={user} className="w-full disabled:cursor-not-allowed shadow-xl py-2.5 px-4 text-[15px] font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none cursor-pointer">
+                                    Log in
+                                </button>
+                        }
                     </div>
 
                     <div className="my-6 flex items-center gap-4">
@@ -87,7 +104,7 @@ const Login = () => {
 
                     <div className="space-x-6 flex justify-center">
                         <button type="button"
-                        disabled={loading || user}
+                            disabled={loading || user}
                             onClick={handleGoogleLogin}
                             className="border disabled:cursor-not-allowed outline-0 cursor-pointer flex items-center gap-4 w-full justify-center p-3 rounded hover:shadow-xl">
                             <FcGoogle size={24} />

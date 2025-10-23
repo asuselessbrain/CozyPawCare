@@ -1,7 +1,20 @@
 import { Link, NavLink } from 'react-router';
 import logo from '../../assets/logo.png';
+import { use } from 'react';
+import { AuthContext } from '../../proviider/AuthContext';
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
+    const { user, logout } = use(AuthContext)
+
+    const handleLogout = async() => {
+        try{
+            await logout()
+            toast.success("Logout Successfully!")
+        }catch(error){
+            toast.error(error.message.split("/")[1].split(")")[0])
+        }
+    }
     const links = [
         {
             name: "Home", links: "/",
@@ -39,7 +52,10 @@ const Navbar = () => {
                     </ul>
                 </div>
                 <div className="navbar-end">
-                    <Link to="/login" className="btn bg-green-500 text-white hover:bg-green-600">Login</Link>
+                    {
+                        user ? <button onClick={handleLogout} className="btn cursor-pointer bg-red-500 text-white hover:bg-red-600">LogOut</button>
+                            : <Link to="/login" className="btn bg-green-500 cursor-pointer text-white hover:bg-green-600">Login</Link>
+                    }
                 </div>
             </div>
         </nav>
