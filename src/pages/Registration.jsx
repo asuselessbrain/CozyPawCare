@@ -35,6 +35,17 @@ const Registration = () => {
             setLoading(false)
             return
         }
+        if((/^(?=.*[A-Z]).+$/).test(password)){
+            toast.warning("Password must be contain at least one uppercase!")
+            setLoading(false)
+            return
+        }
+
+        if((/^(?=.*[a-z]).+$/).test(password)){
+            toast.warning("Password must be contain at least one lowercase!")
+            setLoading(false)
+            return
+        }
 
         if (!isChecked) {
             toast.warning("Please accept the terms and condition!")

@@ -1,11 +1,14 @@
-import { use, useEffect } from 'react';
+import { use, useEffect, useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { AuthContext } from '../proviider/AuthContext';
 import { toast } from 'react-toastify';
+import { FaEyeSlash, FaRegEye } from 'react-icons/fa';
 
 const Login = () => {
     const { loginWithGoogle, user, loading, setLoading, loginWithEmail } = use(AuthContext)
+    const [showPassword, setShowPassword] = useState(false)
+
     const location = useLocation()
     const navigate = useNavigate()
 
@@ -72,9 +75,16 @@ const Login = () => {
                             <label className='text-sm text-slate-900 font-medium mb-2 block'>Email</label>
                             <input name="email" type="email" required className="bg-slate-100 w-full text-sm text-slate-900 px-4 py-3 rounded-md outline-0 border border-gray-200 focus:border-blue-600 focus:bg-transparent" placeholder="Enter Email" />
                         </div>
-                        <div>
-                            <label className='text-sm text-slate-900 font-medium mb-2 block'>Password</label>
-                            <input name="password" type="password" required className="bg-slate-100 w-full text-sm text-slate-900 px-4 py-3 rounded-md outline-0 border border-gray-200 focus:border-blue-600 focus:bg-transparent" placeholder="Enter Password" />
+                        <div className="mt-8">
+                            <label className="text-slate-900 text-[13px] font-medium block mb-2">Password</label>
+                            <div className="relative flex items-center">
+                                <input name="password" type={showPassword ? "text" : "password"} required className="w-full text-slate-900 text-sm border-b border-slate-300 focus:border-blue-600 pl-2 pr-8 py-3 outline-none" placeholder="Enter password" />
+                                {
+                                    showPassword ? <FaEyeSlash onClick={() => setShowPassword(!showPassword)} size={24} className="absolute right-2 cursor-pointer text-gray-400" /> : <FaRegEye onClick={() => setShowPassword(!showPassword)} size={24} className="absolute right-2 cursor-pointer text-gray-400" />
+                                }
+
+
+                            </div>
                         </div>
                         <div className="flex flex-wrap items-center justify-end gap-4">
                             <div className="text-sm">
