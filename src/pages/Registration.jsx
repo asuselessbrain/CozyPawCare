@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 const Registration = () => {
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-    const { updateUser, createUser, setLoading, loading, user, logout } = useContext(AuthContext)
+    const { updateUser, createUser, setLoading, loading, user, logout, loginWithGoogle } = useContext(AuthContext)
 
     useEffect(() => {
         setLoading(false);
@@ -35,13 +35,13 @@ const Registration = () => {
             setLoading(false)
             return
         }
-        if((/^(?=.*[A-Z]).+$/).test(password)){
+        if ((/^(?=.*[A-Z]).+$/).test(password)) {
             toast.warning("Password must be contain at least one uppercase!")
             setLoading(false)
             return
         }
 
-        if((/^(?=.*[a-z]).+$/).test(password)){
+        if ((/^(?=.*[a-z]).+$/).test(password)) {
             toast.warning("Password must be contain at least one lowercase!")
             setLoading(false)
             return
@@ -91,6 +91,22 @@ const Registration = () => {
             setLoading(false)
         }
 
+    }
+
+    const handleGoogleLogin = async () => {
+        setLoading(true)
+        try {
+            const res = await loginWithGoogle()
+            if (res.user) {
+                toast.success("Login Successful !")
+                navigate(location.state ? location.state : "/")
+                setLoading(false)
+            }
+        }
+        catch (error) {
+            toast.error(error.message.split("/")[1].split(")")[0])
+            setLoading(false)
+        }
     }
     return (
         <div className="min-h-[calc(100vh-120px)] flex flex-col items-center justify-center p-4 my-10">
@@ -162,6 +178,21 @@ const Registration = () => {
                                         Sign Up
                                     </button>
                             }
+                        </div>
+                        <div className="my-6 flex items-center gap-4">
+                            <hr className="w-full border-slate-300" />
+                            <p className="text-sm text-slate-900 text-center">or</p>
+                            <hr className="w-full border-slate-300" />
+                        </div>
+
+                        <div className="space-x-6 flex justify-center">
+                            <button type="button"
+                                disabled={loading || user}
+                                onClick={handleGoogleLogin}
+                                className="border disabled:cursor-not-allowed outline-0 cursor-pointer flex items-center gap-4 w-full justify-center p-3 rounded hover:shadow-xl">
+                                <FcGoogle size={24} />
+                                Login With Google
+                            </button>
                         </div>
                     </form>
                 </div>
